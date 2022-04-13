@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
+import ReactDOM from "react-dom";
 import { useFormik } from "formik";
 import * as yup from "yup";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Stack from "@mui/material/Stack";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import IconButton from "@mui/material/IconButton";
 
 const validationSchema = yup.object({
   name: yup
@@ -25,6 +29,9 @@ const validationSchema = yup.object({
 });
 
 const Form = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+  
   const formik = useFormik({
     initialValues: {
       name: "",
@@ -57,7 +64,8 @@ const Form = () => {
           variant="standard"
           id="name"
           name="name"
-          label="What is your name"
+          label="First name"
+          placeholder="What is your name"
           value={formik.values.name}
           onChange={formik.handleChange}
           error={formik.touched.name && Boolean(formik.errors.name)}
@@ -68,7 +76,8 @@ const Form = () => {
           variant="standard"
           id="email"
           name="email"
-          label="What is your business email"
+          label="Company email"
+          placeholder="What is your business email"
           value={formik.values.email}
           onChange={formik.handleChange}
           error={formik.touched.email && Boolean(formik.errors.email)}
@@ -78,13 +87,26 @@ const Form = () => {
           fullWidth
           id="password"
           variant="standard"
-          type="password"
+          type={showPassword ? "text" : "password"}
           name="password"
           value={formik.values.password}
           onChange={formik.handleChange}
           error={formik.touched.password && Boolean(formik.errors.password)}
           helperText={formik.touched.password && formik.errors.password}
-          label="Enter your password"
+          label="Password"
+          placeholder="Enter your password"
+          helperText="Must be at least 8 characters and contain 1 number"
+          InputProps={{
+            startAdornment: (
+              <IconButton
+                aria-label="toggle password visibility"
+                onClick={handleClickShowPassword}
+                edge="start"
+              >
+                {showPassword ? <VisibilityOff /> : <Visibility />}
+              </IconButton>
+            ),
+          }}
         />
         <Button
           fullWidth
@@ -93,7 +115,7 @@ const Form = () => {
           variant="contained"
           type="submit"
         >
-          Submit
+          Create account
         </Button>
       </Stack>
     </Box>
